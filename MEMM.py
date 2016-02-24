@@ -37,14 +37,15 @@ for line in input_file:
 			wordStartList.append(word)
 			boi_end_list.append(boi_full_list[-1])
 			change_of_sentence_flag = 0
+
 		boi_full_list.append(boi)
-       		item = word, tag, boi, previous_BOI
-        	labeled_features.append(item)
-		previous_BOI = boi
-        #labeled_features
+		item = word, tag, boi, previous_BOI
+        labeled_features.append(item)
+	previous_BOI = boi
 
 print boi_full_list
 print wordStartList
 print boi_end_list
+print labeled_features
 
 input_file.close()
