@@ -17,11 +17,11 @@ labeled_features = []
 output_file = open("twitter.txt", "wb")
 output_file2 = open("trainA30Test.txt", "wb")
 
-testing_file = open("oct27.test.np", "rb")
+testing_file = open("oct27.train.np", "rb")
 
-training_file = open("oct27.train.np", "rb")
+training_file = open("oct27.test.np", "rb")
 
-f = open('my_classifier100.pickle', 'rb')
+f = open('my_classifier300.pickle', 'rb')
 maxent_classifier = pickle.load(f)
 f.close()
 
@@ -37,7 +37,7 @@ for line in input_file:
 		sentenceList = line.split()
 		word = sentenceList[0]
 		#print word
-		tag = 0
+		tag = 1
 		boi = sentenceList[1]
 
 		#store words that are begining of the sentence
@@ -69,7 +69,7 @@ for i in BOI_list:
 		if i == boi_end_list[j]:
 			countEnd = countEnd + 1
 
-	ProbE = format(countEnd/(countTag*1.0), '.5f')
+	ProbE = format(countEnd/(countTag*1.0+1), '.5f')
 	#print ProbE
 
 	dicE.update({i: {"END":ProbE}})
@@ -197,7 +197,7 @@ for line in input_file:
 		sentenceList = line.split()
 		word = sentenceList[0]
 		#print (word)
-		tag = 0
+		tag = 1
 		boi = sentenceList[1]
 		wordList.append(word)
 		tagList.append(tag)
