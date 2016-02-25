@@ -15,12 +15,13 @@ wordStartList.append('I')
 BOI_list = ['!', '#', '$', '&', ',', 'A', '@', 'E', 'D', 'G', 'M', 'L', 'O', 'N', 'P', 'S', 'R', 'U', 'T', 'V', 'Y', 'X', 'Z', '^', '~']
 labeled_features = []
 output_file = open("twitter.txt", "wb")
+output_file2 = open("trainA30Test.txt", "wb")
 
 testing_file = open("oct27.test.np", "rb")
 
 training_file = open("oct27.train.np", "rb")
 
-f = open('my_classifier.pickle', 'rb')
+f = open('my_classifier100.pickle', 'rb')
 maxent_classifier = pickle.load(f)
 f.close()
 
@@ -36,7 +37,7 @@ for line in input_file:
 		sentenceList = line.split()
 		word = sentenceList[0]
 		#print word
-		tag = sentenceList[1]
+		tag = 0
 		boi = sentenceList[1]
 
 		#store words that are begining of the sentence
@@ -90,7 +91,6 @@ def MEMM_features(word, tag, previous_BOI):
 
 	return features
 labeled_featuresets = [(MEMM_features(word, tag, previous_BOI), boi )for (word, tag, boi, previous_BOI) in labeled_features]
-#print labeled_featuresets
 
 train_set = labeled_featuresets
 
@@ -179,7 +179,7 @@ def MEMM(wordList,tagList):
 		index = index -1
 	return path
 
-
+##test
 
 wordList = [] #store words in a sentence
 tagList = [] #store part-of-speech tag in a sentence
@@ -187,6 +187,8 @@ boiList = [] #store boi tags in a sentence
 #prob_table = {} #stpre the posterior
 previous_BOI = "start"
 BOI_list = ['!', '#', '$', '&', ',', 'A', '@', 'E', 'D', 'G', 'M', 'L', 'O', 'N', 'P', 'S', 'R', 'U', 'T', 'V', 'Y', 'X', 'Z', '^', '~']
+countAll = 0
+countRight = 0
 
 input_file = testing_file
 for line in input_file:
@@ -195,15 +197,12 @@ for line in input_file:
 		sentenceList = line.split()
 		word = sentenceList[0]
 		#print (word)
-		tag = sentenceList[1]
+		tag = 0
 		boi = sentenceList[1]
 		wordList.append(word)
 		tagList.append(tag)
 		boiList.append(boi)
-		#print wordList
-		#store words that are begining of the sentence
-		#store tags that are the begining of the sentence
-		#store the end of sentence tag in tagEndList
+
 		if change_of_sentence_flag == 1:
 			wordStartList.append(word)
 			change_of_sentence_flag = 0
@@ -217,14 +216,20 @@ for line in input_file:
 		print path
 
 		for i in range(len(wordList)): #part_of_speech_tag(tagList) and token_list(wordList) has the same length
-			output_file.write(wordList[i]+"	"+ tagList[i]+ " " + boiList[i] + " " + path[i] + "\n")
+			output_file2.write(wordList[i]+"	"+  " " + path[i] + "\n")
+			if boiList[i] == path[i]:
+				countRight += 1
 
+		countAll = countAll + len(wordList)
 		output_file.write("\n")
 		wordList = [] # refresh word list
 		tagList = []
 		boiList = []
 		print "Processing"
 		#prob_table = {}#refresh prob_table
+
+print countAll
+print countRight
 
 input_file.close()
 output_file.close()
